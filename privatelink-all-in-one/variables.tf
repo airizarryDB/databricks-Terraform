@@ -78,7 +78,7 @@ variable "project_name" {
 
 locals {
   description = "Prefix used for root bucket name"
-  prefix = "test" // Must be changed
+  prefix = lower("test") // Must be changed
 }
 
 
