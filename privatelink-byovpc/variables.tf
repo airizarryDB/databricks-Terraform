@@ -56,10 +56,6 @@ variable "ex_databricks_account_id" {
   default     = "414351767826"
 }
 
-variable "private_dns_enabled" {
-  default = true
-}
-
 variable "vpc_id" {
   default = "ID of existing VPC (e.g. \"vpc-01234567890abcdef\")"
 }

@@ -171,16 +171,20 @@ module "vpc_endpoints" {
      },
     sts = {
       service             = "sts"
-      private_dns_enabled = true
+      vpc_endpoint_type   = "Interface"
+      security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids          = [aws_subnet.vpce.id]
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-sts-vpc-endpoint"
       }
     },
     kinesis-streams = {
       service             = "kinesis-streams"
-      private_dns_enabled = true
+      vpc_endpoint_type   = "Interface"
+      security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids           = [aws_subnet.vpce.id]
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-kinesis-vpc-endpoint"
       }
@@ -190,7 +194,7 @@ module "vpc_endpoints" {
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids          = [aws_subnet.vpce.id]
-      private_dns_enabled = var.private_dns_enabled
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-backend-rest-vpc-endpoint"
       }
@@ -200,7 +204,7 @@ module "vpc_endpoints" {
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids          = [aws_subnet.vpce.id]
-      private_dns_enabled = var.private_dns_enabled
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-scc-relay-vpc-endpoint"
       }
