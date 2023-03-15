@@ -56,10 +56,6 @@ variable "ex_databricks_account_id" {
   default     = "414351767826"
 }
 
-variable "private_dns_enabled" {
-  default = true
-}
-
 variable "cidr_block_private" {
   default = "10.1.0.0/16"
 }

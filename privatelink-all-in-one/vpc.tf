@@ -83,16 +83,20 @@ module "vpc_endpoints" {
      },
     sts = {
       service             = "sts"
-      private_dns_enabled = true
+      vpc_endpoint_type   = "Interface"
+      security_group_ids  = [module.vpc.default_security_group_id]
       subnet_ids          = [module.vpc.private_subnets[2]]
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-sts-vpc-endpoint"
       }
     },
     kinesis-streams = {
       service             = "kinesis-streams"
+      vpc_endpoint_type   = "Interface"
+      security_group_ids  = [module.vpc.default_security_group_id]
+      subnet_ids          = [module.vpc.private_subnets[2]]
       private_dns_enabled = true
-      subnet_ids           = [module.vpc.private_subnets[2]]
       tags = {
         Name = "${var.project_name}-kinesis-vpc-endpoint"
       }
@@ -102,7 +106,7 @@ module "vpc_endpoints" {
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [module.vpc.default_security_group_id]
       subnet_ids          = [module.vpc.private_subnets[2]]
-      private_dns_enabled = var.private_dns_enabled
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-backend-rest-vpc-endpoint"
       }
@@ -112,7 +116,7 @@ module "vpc_endpoints" {
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [module.vpc.default_security_group_id]
       subnet_ids          = [module.vpc.private_subnets[2]]
-      private_dns_enabled = var.private_dns_enabled
+      private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-scc-relay-vpc-endpoint"
       }
