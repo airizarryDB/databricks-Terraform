@@ -157,7 +157,7 @@ resource "aws_security_group" "databricks_sg" {
 
 module "vpc_endpoints" {
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version            = "3.2.0"
+  version            = "3.19.0"
   vpc_id             = data.aws_vpc.my_vpc.id
   security_group_ids = [aws_security_group.databricks_sg.id]
   endpoints = {
