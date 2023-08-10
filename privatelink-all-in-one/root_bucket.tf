@@ -19,6 +19,15 @@ resource "aws_s3_bucket_public_access_block" "this" {
 resource "aws_s3_bucket_acl" "root_storage_bucket" {
   bucket = aws_s3_bucket.root_storage_bucket.id
   acl    = "private"
+  depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership]
+}
+
+# Resource to avoid error "AccessControlListNotSupported: The bucket does not allow ACLs"
+resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
+  bucket = aws_s3_bucket.root_storage_bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 resource "aws_s3_bucket_versioning" "versioning_example" {
