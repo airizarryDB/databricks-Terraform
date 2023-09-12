@@ -100,6 +100,14 @@ resource "aws_security_group" "databricks_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+      description = "CP Services"
+      from_port   = 8443
+      to_port     = 8451
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+
   tags = merge(var.tags, {
     Name = "${local.prefix}-${data.aws_vpc.my_vpc.id}-pl-vpce-sg-rules"
   })
