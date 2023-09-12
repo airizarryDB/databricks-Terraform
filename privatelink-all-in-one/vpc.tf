@@ -56,6 +56,13 @@ module "vpc" {
       to_port     = 6666
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      description = "CP Services"
+      from_port   = 8443
+      to_port     = 8451
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
     }
   ]
 
