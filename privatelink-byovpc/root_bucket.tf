@@ -55,6 +55,14 @@ data "aws_iam_policy_document" "this" {
       identifiers = ["arn:aws:iam::${var.ex_databricks_account_id}:root"]
       type        = "AWS"
     }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalTag/DatabricksAccountId"
+
+      values = [
+        var.account_console_id
+      ]
+    }
   }
 }
 
