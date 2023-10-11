@@ -11,7 +11,7 @@ Step 3: Git Clone Repo
 Step 4: Change Directories
 
   ```
-    cd databricks-Terraform/privatelink-all-in-one/
+    cd databricks-Terraform/privatelink-all-in-one-gov/
    ``` 
 
 Step 5: Set values in template.tfvars file
