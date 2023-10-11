@@ -69,7 +69,7 @@ resource "aws_security_group" "databricks_sg" {
   }
 
   egress {
-    description = "Outbound 443"
+    description = "Databricks infrastructure, cloud data sources, and library repositories"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -77,7 +77,7 @@ resource "aws_security_group" "databricks_sg" {
   }
 
   egress {
-    description = "Outbound 3306"
+    description = "Metastore"
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
@@ -85,7 +85,7 @@ resource "aws_security_group" "databricks_sg" {
   }
 
   egress {
-    description = "Outbound 6666"
+    description = "Secure Cluster Connectivity"
     from_port   = 6666
     to_port     = 6666
     protocol    = "tcp"
@@ -93,7 +93,7 @@ resource "aws_security_group" "databricks_sg" {
   }
 
   egress {
-    description = "Outbound 2443"
+    description = "FIPS encryption Secure Cluster Connectivity"
     from_port   = 2443
     to_port     = 2443
     protocol    = "tcp"
