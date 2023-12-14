@@ -20,7 +20,7 @@ Using any editor set the values in the template.tfvars file. The descriptions of
 
 Further Documentation for some of the variables:
 
-[account_console_id](https://docs.databricks.com/administration-guide/account-settings/index.html#locate-your-account-id)
+[databricks_account_id](https://docs.databricks.com/administration-guide/account-settings/index.html#locate-your-account-id)
 
 
 ## Run Terraform

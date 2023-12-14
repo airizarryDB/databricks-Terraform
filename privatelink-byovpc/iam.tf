@@ -12,7 +12,7 @@ resource "aws_iam_role" "cross_account_role" {
           },
           "Condition" : {
             "StringEquals" : {
-              "sts:ExternalId" : var.account_console_id
+              "sts:ExternalId" : var.databricks_account_id
             }
           }
         }

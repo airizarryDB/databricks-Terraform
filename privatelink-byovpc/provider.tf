@@ -20,13 +20,15 @@ provider "aws" {
 provider "databricks" {
   alias    = "mws"
   host     = "https://accounts.cloud.databricks.com/"
-  username = var.databricks_account_username
-  password = var.databricks_account_password
+  account_id    = var.databricks_account_id
+  client_id     = var.client_id
+  client_secret = var.client_secret
 }
 // initialize provider at workspace level, to create UC resources
 provider "databricks" {
   alias    = "workspace"
   host     = databricks_mws_workspaces.this.workspace_url
-  username = var.databricks_account_username
-  password = var.databricks_account_password
+  account_id    = var.databricks_account_id
+  client_id     = var.client_id
+  client_secret = var.client_secret
 }

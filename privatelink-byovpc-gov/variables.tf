@@ -18,26 +18,39 @@ variable "profile" {
 }
 
 variable "region" {
-  description = "pick region: us-east-1, us-west-2"
+  description = "Databricks only operates in AWS Gov West (us-gov-west-1)"
+  default = "us-gov-west-1"
+}
+
+variable "databricks_gov_shard" {
+  description = "pick shard: civilian, dod"
   validation {
-    condition     = contains(["us-east-1", "us-west-2"], var.region)
-    error_message = "Valid values for var: region are (us-east-1, us-west-2)."
+    condition     = contains(["civilian", "dod"], var.databricks_gov_shard)
+    error_message = "Valid values for var: databricks_gov_shard are (civilian, dod)."
+  }
+}
+
+variable "account_console" {
+  type = map(string)
+  default = {
+    "civilian" = "https://accounts.cloud.databricks.us/"
+    "dod"      = "https://accounts-dod.cloud.databricks.us/"
   }
 }
 
 variable "backend_rest" {
   type = map(string)
   default = {
-    "us-east-1" = "com.amazonaws.vpce.us-east-1.vpce-svc-09143d1e626de2f04"
-    "us-west-2" = "com.amazonaws.vpce.us-west-2.vpce-svc-0129f463fcfbc46c5"
+    "civilian" = "com.amazonaws.vpce.us-gov-west-1.vpce-svc-0f25e28401cbc9418"
+    "dod"      = "com.amazonaws.vpce.us-gov-west-1.vpce-svc-05c210a2feea23ad7"
   }
 }
 
 variable "relay" {
   type = map(string)
   default = {
-    "us-east-1" = "com.amazonaws.vpce.us-east-1.vpce-svc-00018a8c3ff62ffdf"
-    "us-west-2" = "com.amazonaws.vpce.us-west-2.vpce-svc-0158114c0c730c3bb"
+    "civilian" = "com.amazonaws.vpce.us-gov-west-1.vpce-svc-05f27abef1a1a3faa"
+    "dod"      = "com.amazonaws.vpce.us-gov-west-1.vpce-svc-08fddf710780b2a54"
   }
 }
 
@@ -58,8 +71,8 @@ locals {
 
 variable "ex_databricks_account_id" {
   type        = string
-  description = "This is the Databricks AWS account id (414351767826); used for the bucket policy"
-  default     = "414351767826"
+  description = "This is the Databricks AWS gov account id (044793339203); used for the bucket policy"
+  default     = "044793339203"
 }
 
 variable "vpc_id" {

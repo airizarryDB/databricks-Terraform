@@ -1,7 +1,13 @@
-variable "databricks_account_username" {}
-variable "databricks_account_password" {}
+variable "client_id" {
+  type        = string
+  description = "Databricks Account Service Principal Client ID"
+}
+variable "client_secret" {
+  type        = string
+  description = "Databricks Account Service Principal Client Secret"
+}
 
-variable "account_console_id" {
+variable "databricks_account_id" {
   type        = string
   description = "Databricks Account Console ID"
 }

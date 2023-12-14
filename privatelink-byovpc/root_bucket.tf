@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "this" {
       variable = "aws:PrincipalTag/DatabricksAccountId"
 
       values = [
-        var.account_console_id
+        var.databricks_account_id
       ]
     }
   }
