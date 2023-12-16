@@ -16,19 +16,19 @@ resource "databricks_mws_storage_configurations" "this" {
 resource "databricks_mws_vpc_endpoint" "backend_rest_vpce" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
-  aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["backend-rest"].id
+  aws_vpc_endpoint_id = module.endpoints.endpoints["backend-rest"].id
   vpc_endpoint_name   = "${local.prefix}-vpc-backend-${module.vpc.vpc_id}"
   region              = var.region
-  depends_on          = [module.vpc_endpoints]
+  depends_on          = [module.endpoints]
 }
 
 resource "databricks_mws_vpc_endpoint" "relay" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
-  aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["relay"].id
+  aws_vpc_endpoint_id = module.endpoints.endpoints["relay"].id
   vpc_endpoint_name   = "${local.prefix}-vpc-relay-${module.vpc.vpc_id}"
   region              = var.region
-  depends_on          = [module.vpc_endpoints]
+  depends_on          = [module.endpoints]
 }
 
 resource "databricks_mws_networks" "this" {
@@ -42,7 +42,7 @@ resource "databricks_mws_networks" "this" {
     dataplane_relay = [databricks_mws_vpc_endpoint.relay.vpc_endpoint_id]
      rest_api        = [databricks_mws_vpc_endpoint.backend_rest_vpce.vpc_endpoint_id]
    }
-  depends_on = [module.vpc, module.vpc_endpoints, databricks_mws_vpc_endpoint.relay, databricks_mws_vpc_endpoint.backend_rest_vpce]
+  depends_on = [module.vpc, module.endpoints, databricks_mws_vpc_endpoint.relay, databricks_mws_vpc_endpoint.backend_rest_vpce]
 }
 
 resource "databricks_mws_private_access_settings" "pas" {
