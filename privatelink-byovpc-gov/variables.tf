@@ -96,9 +96,12 @@ variable "project_name" {
   description = "Name that will be used in the workspace URL"
 }
 
-locals {
+variable "resource_prefix" {
   description = "Prefix used for root bucket name"
-  prefix = lower("test") // Must be changed
+  validation {
+    condition     = (can(regex("^[a-z-]+$", var.resource_prefix)))
+    error_message = "Invalid variable name, make sure it is all lower case"
+  }
 }
 
 

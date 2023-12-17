@@ -2,7 +2,7 @@ resource "databricks_mws_credentials" "this" {
   provider         = databricks.mws
   account_id       = var.databricks_account_id
   role_arn         = aws_iam_role.cross_account_role.arn
-  credentials_name = "${local.prefix}-creds"
+  credentials_name = "${var.resource_prefix}-creds"
   depends_on       = [time_sleep.wait_30_seconds]
 }
 
@@ -10,14 +10,14 @@ resource "databricks_mws_storage_configurations" "this" {
   provider                   = databricks.mws
   account_id                 = var.databricks_account_id
   bucket_name                = aws_s3_bucket.root_storage_bucket.bucket
-  storage_configuration_name = "${local.prefix}-storage"
+  storage_configuration_name = "${var.resource_prefix}-storage"
 }
 
 resource "databricks_mws_vpc_endpoint" "backend_rest_vpce" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["backend-rest"].id
-  vpc_endpoint_name   = "${local.prefix}-vpc-backend-${data.aws_vpc.my_vpc.id}"
+  vpc_endpoint_name   = "${var.resource_prefix}-vpc-backend-${data.aws_vpc.my_vpc.id}"
   region              = var.region
   depends_on          = [module.vpc_endpoints]
 }
@@ -26,7 +26,7 @@ resource "databricks_mws_vpc_endpoint" "relay" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["relay"].id
-  vpc_endpoint_name   = "${local.prefix}-vpc-relay-${data.aws_vpc.my_vpc.id}"
+  vpc_endpoint_name   = "${var.resource_prefix}-vpc-relay-${data.aws_vpc.my_vpc.id}"
   region              = var.region
   depends_on          = [module.vpc_endpoints]
 }
@@ -34,7 +34,7 @@ resource "databricks_mws_vpc_endpoint" "relay" {
 resource "databricks_mws_networks" "this" {
   provider           = databricks.mws
   account_id         = var.databricks_account_id
-  network_name       = "${local.prefix}-network"
+  network_name       = "${var.resource_prefix}-network"
   security_group_ids = [aws_security_group.databricks_sg.id]
   subnet_ids         = [aws_subnet.private1.id, aws_subnet.private2.id]
   vpc_id             = data.aws_vpc.my_vpc.id

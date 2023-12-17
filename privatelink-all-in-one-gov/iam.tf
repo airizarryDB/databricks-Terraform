@@ -1,5 +1,5 @@
 resource "aws_iam_role" "cross_account_role" {
-  name               = "${local.prefix}-crossaccount-role"
+  name               = "${var.resource_prefix}-crossaccount-role"
   tags               = var.tags
   assume_role_policy = jsonencode({
       "Version" : "2012-10-17",
@@ -21,7 +21,7 @@ resource "aws_iam_role" "cross_account_role" {
 }
 
 resource "aws_iam_role_policy" "this" {
-  name   = "${local.prefix}-policy"
+  name   = "${var.resource_prefix}-policy"
   role   = aws_iam_role.cross_account_role.id
   policy = jsonencode({
   "Version": "2012-10-17",

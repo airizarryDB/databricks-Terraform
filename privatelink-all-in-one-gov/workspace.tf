@@ -10,14 +10,14 @@ resource "databricks_mws_storage_configurations" "this" {
   provider                   = databricks.mws
   account_id                 = var.databricks_account_id
   bucket_name                = aws_s3_bucket.root_storage_bucket.bucket
-  storage_configuration_name = "${local.prefix}-storage"
+  storage_configuration_name = "${var.resource_prefix}-storage"
 }
 
 resource "databricks_mws_vpc_endpoint" "backend_rest_vpce" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.endpoints.endpoints["backend-rest"].id
-  vpc_endpoint_name   = "${local.prefix}-vpc-backend-${module.vpc.vpc_id}"
+  vpc_endpoint_name   = "${var.resource_prefix}-vpc-backend-${module.vpc.vpc_id}"
   region              = var.region
   depends_on          = [module.endpoints]
 }
@@ -26,7 +26,7 @@ resource "databricks_mws_vpc_endpoint" "relay" {
   provider            = databricks.mws
   account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.endpoints.endpoints["relay"].id
-  vpc_endpoint_name   = "${local.prefix}-vpc-relay-${module.vpc.vpc_id}"
+  vpc_endpoint_name   = "${var.resource_prefix}-vpc-relay-${module.vpc.vpc_id}"
   region              = var.region
   depends_on          = [module.endpoints]
 }
@@ -34,7 +34,7 @@ resource "databricks_mws_vpc_endpoint" "relay" {
 resource "databricks_mws_networks" "this" {
   provider           = databricks.mws
   account_id         = var.databricks_account_id
-  network_name       = "${local.prefix}-network"
+  network_name       = "${var.resource_prefix}-network"
   security_group_ids = [module.vpc.default_security_group_id]
   subnet_ids         = [module.vpc.private_subnets[0], module.vpc.private_subnets[1]]
   vpc_id             = module.vpc.vpc_id
