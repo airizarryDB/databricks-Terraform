@@ -104,4 +104,14 @@ variable "resource_prefix" {
   }
 }
 
+variable "ucname" {
+  description = "URL compliant name for Unity Catalog Metastore"
+  type = string
+}
+
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type = string
+}
+
 
