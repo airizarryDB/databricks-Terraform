@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "vpc_igw" {
 resource "aws_eip" "nat_eip" {
   vpc = true
   tags = {
-    Name = "${local.prefix}-NAT_EIP"
+    Name = "${var.resource_prefix}-NAT_EIP"
   }
   depends_on = [aws_internet_gateway.vpc_igw]
 }
@@ -41,7 +41,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public.id
   allocation_id = aws_eip.nat_eip.id
   tags          = {
-    Name = "${local.prefix}-NAT"
+    Name = "${var.resource_prefix}-NAT"
   }
   depends_on = [aws_eip.nat_eip, aws_internet_gateway.vpc_igw]
 }
@@ -109,7 +109,7 @@ resource "aws_security_group" "databricks_sg" {
     }
 
   tags = merge(var.tags, {
-    Name = "${local.prefix}-${data.aws_vpc.my_vpc.id}-pl-vpce-sg-rules"
+    Name = "${var.resource_prefix}-${data.aws_vpc.my_vpc.id}-pl-vpce-sg-rules"
   })
 }
 
@@ -118,7 +118,7 @@ resource "aws_security_group" "databricks_sg" {
    vpc_id = data.aws_vpc.my_vpc.id
 
    tags = merge(var.tags, {
-     Name = "${local.prefix}-${data.aws_vpc.my_vpc.id}-pl-subnet-route-tbl"
+     Name = "${var.resource_prefix}-${data.aws_vpc.my_vpc.id}-pl-subnet-route-tbl"
    })
    route {
     cidr_block = "0.0.0.0/0"
@@ -149,7 +149,7 @@ resource "aws_security_group" "databricks_sg" {
    vpc_id = data.aws_vpc.my_vpc.id
 
    tags = merge(var.tags, {
-     Name = "${local.prefix}-${data.aws_vpc.my_vpc.id}-pl-local-route-tbl"
+     Name = "${var.resource_prefix}-${data.aws_vpc.my_vpc.id}-pl-local-route-tbl"
    })
    route {
     cidr_block = "0.0.0.0/0"
