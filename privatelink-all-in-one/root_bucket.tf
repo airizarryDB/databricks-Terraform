@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "root_storage_bucket" {
-  bucket = "${local.prefix}-rootbucket-terraform"
+  bucket = "${var.resource_prefix}-rootbucket-terraform"
 
   force_destroy = true
   tags = merge(var.tags, {
-    Name = "${local.prefix}-rootbucket-terraform"
+    Name = "${var.resource_prefix}-rootbucket-terraform"
   })
 }
 
