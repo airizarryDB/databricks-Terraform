@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "4.0.2"
+  version = "5.4.0"
 
   name                  = var.project_name
   cidr                  = var.cidr_block_private
@@ -76,7 +76,7 @@ module "vpc" {
 
 module "vpc_endpoints" {
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version            = "3.19.0"
+  version            = "5.4.0"
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [module.vpc.default_security_group_id]
   endpoints = {
