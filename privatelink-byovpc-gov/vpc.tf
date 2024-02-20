@@ -198,7 +198,7 @@ module "vpc_endpoints" {
       }
     },
     backend-rest = {
-      service_name        = var.backend_rest[var.region]
+      service_name        = var.backend_rest[var.databricks_gov_shard]
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids          = [aws_subnet.vpce.id]
@@ -208,7 +208,7 @@ module "vpc_endpoints" {
       }
     },
     relay = {
-      service_name        = var.relay[var.region]
+      service_name        = var.relay[var.databricks_gov_shard]
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
       subnet_ids          = [aws_subnet.vpce.id]
