@@ -1,7 +1,7 @@
-resource "null_resource" "previous" {}
+resource "null_resource" "unity_previous" {}
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [null_resource.previous]
+resource "time_sleep" "unity_wait_30_seconds" {
+  depends_on = [null_resource.unity_previous]
 
   create_duration = "30s"
 }
@@ -144,7 +144,7 @@ resource "databricks_metastore_data_access" "this" {
   }
   is_default = true
   depends_on = [
-    databricks_metastore.this, aws_iam_role.unity_catalog_role, time_sleep.wait_30_seconds
+    databricks_metastore.this, aws_iam_role.unity_catalog_role, time_sleep.unity_wait_30_seconds
   ]
 }
 
