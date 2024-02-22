@@ -1,51 +1,3 @@
-resource "aws_subnet" "private1" {
-  vpc_id            = data.aws_vpc.my_vpc.id
-  availability_zone = data.aws_availability_zones.available.names[0]
-  cidr_block        = cidrsubnet(var.cidr_block_private, 2, 0) #cidrsubnet(data.aws_vpc.selected.cidr_block, 4, 1)
-}
-
-resource "aws_subnet" "private2" {
-  vpc_id            = data.aws_vpc.my_vpc.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-  cidr_block        = cidrsubnet(var.cidr_block_private, 2, 1) #cidrsubnet(data.aws_vpc.selected.cidr_block, 4, 1)
-}
-
-resource "aws_subnet" "vpce" {
-  vpc_id            = data.aws_vpc.my_vpc.id
-  availability_zone = data.aws_availability_zones.available.names[0]
-  cidr_block        = cidrsubnet(var.vpce_subnet_cidr  , 0, 0) #cidrsubnet(data.aws_vpc.selected.cidr_block, 4, 1)
-}
-
-resource "aws_subnet" "public" {
-  vpc_id            = data.aws_vpc.my_vpc.id
-  availability_zone = data.aws_availability_zones.available.names[0]
-  cidr_block        = cidrsubnet(var.cidr_block_public , 0, 0) #cidrsubnet(data.aws_vpc.selected.cidr_block, 4, 1)
-}
-
-# Create an IGW
-resource "aws_internet_gateway" "vpc_igw" {
-  vpc_id = data.aws_vpc.my_vpc.id
-}
-
-#Create EIP
-resource "aws_eip" "nat_eip" {
-  vpc = true
-  tags = {
-    Name = "${var.resource_prefix}-NAT_EIP"
-  }
-  depends_on = [aws_internet_gateway.vpc_igw]
-}
-
-# Create a NAT GW
-resource "aws_nat_gateway" "nat" {
-  subnet_id     = aws_subnet.public.id
-  allocation_id = aws_eip.nat_eip.id
-  tags          = {
-    Name = "${var.resource_prefix}-NAT"
-  }
-  depends_on = [aws_eip.nat_eip, aws_internet_gateway.vpc_igw]
-}
-
 resource "aws_security_group" "databricks_sg" {
   name        = "Databricks Workspace/VPC endpoint security group"
   description = "Security group shared with workspace EC2 instances and VPC endpoints"
@@ -113,56 +65,6 @@ resource "aws_security_group" "databricks_sg" {
   })
 }
 
-#Create route table for Databricks Subnets
- resource "aws_route_table" "subnet" {
-   vpc_id = data.aws_vpc.my_vpc.id
-
-   tags = merge(var.tags, {
-     Name = "${var.resource_prefix}-${data.aws_vpc.my_vpc.id}-pl-subnet-route-tbl"
-   })
-   route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat.id
-  }
-   depends_on = [aws_nat_gateway.nat]
- }
- #Create  Dataplane Subnet RT Association
- resource "aws_route_table_association" "dataplane_subnet_1" {
-   subnet_id      = aws_subnet.private1.id
-   route_table_id = aws_route_table.subnet.id
- }
-
- #Create  Dataplane Subnet RT Association
- resource "aws_route_table_association" "dataplane_subnet_2" {
-   subnet_id      = aws_subnet.private2.id
-   route_table_id = aws_route_table.subnet.id
- }
-
- #Create  Dataplane Subnet RT Association
- resource "aws_route_table_association" "vpce_subnet" {
-   subnet_id      = aws_subnet.vpce.id
-   route_table_id = aws_route_table.subnet.id
- }
-
-#Create route table for Dataplane Public Subnet
- resource "aws_route_table" "public" {
-   vpc_id = data.aws_vpc.my_vpc.id
-
-   tags = merge(var.tags, {
-     Name = "${var.resource_prefix}-${data.aws_vpc.my_vpc.id}-pl-local-route-tbl"
-   })
-   route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.vpc_igw.id
-  }
-   depends_on = [aws_internet_gateway.vpc_igw]
- }
- #Create  Dataplane VPC Endpoint Subnet
- resource "aws_route_table_association" "dataplane_public_rtb" {
-   subnet_id      = aws_subnet.public.id
-   route_table_id = aws_route_table.public.id
- }
-
 module "vpc_endpoints" {
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version            = "3.19.0"
@@ -172,7 +74,7 @@ module "vpc_endpoints" {
      s3 = {
        service         = "s3"
        service_type    = "Gateway"
-       route_table_ids = flatten([aws_route_table.subnet.id, aws_route_table.public.id])
+       route_table_ids = data.aws_route_table.default.id #flatten([aws_route_table.subnet.id, aws_route_table.public.id])
        tags = {
          Name = "${var.project_name}-s3-vpc-endpoint"
        }
@@ -181,7 +83,7 @@ module "vpc_endpoints" {
       service             = "sts"
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
-      subnet_ids          = [aws_subnet.vpce.id]
+      subnet_ids          = [data.aws_subnet.vpce.id]
       private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-sts-vpc-endpoint"
@@ -191,7 +93,7 @@ module "vpc_endpoints" {
       service             = "kinesis-streams"
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
-      subnet_ids           = [aws_subnet.vpce.id]
+      subnet_ids           = [data.aws_subnet.vpce.id]
       private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-kinesis-vpc-endpoint"
@@ -201,7 +103,7 @@ module "vpc_endpoints" {
       service_name        = var.backend_rest[var.databricks_gov_shard]
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
-      subnet_ids          = [aws_subnet.vpce.id]
+      subnet_ids          = [data.aws_subnet.vpce.id]
       private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-backend-rest-vpc-endpoint"
@@ -211,7 +113,7 @@ module "vpc_endpoints" {
       service_name        = var.relay[var.databricks_gov_shard]
       vpc_endpoint_type   = "Interface"
       security_group_ids  = [aws_security_group.databricks_sg.id]
-      subnet_ids          = [aws_subnet.vpce.id]
+      subnet_ids          = [data.aws_subnet.vpce.id]
       private_dns_enabled = true
       tags = {
         Name = "${var.project_name}-scc-relay-vpc-endpoint"
@@ -219,5 +121,5 @@ module "vpc_endpoints" {
     }
   }
   tags       = var.tags
-  depends_on = [data.aws_vpc.my_vpc, aws_subnet.vpce]
+  depends_on = [data.aws_vpc.my_vpc, data.aws_subnet.vpce]
 }

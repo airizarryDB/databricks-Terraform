@@ -36,7 +36,7 @@ resource "databricks_mws_networks" "this" {
   account_id         = var.databricks_account_id
   network_name       = "${var.resource_prefix}-network"
   security_group_ids = [aws_security_group.databricks_sg.id]
-  subnet_ids         = [aws_subnet.private1.id, aws_subnet.private2.id]
+  subnet_ids         = [data.aws_subnet.private1.id, data.aws_subnet.private2.id]
   vpc_id             = data.aws_vpc.my_vpc.id
     vpc_endpoints {
     dataplane_relay = [databricks_mws_vpc_endpoint.relay.vpc_endpoint_id]
