@@ -63,19 +63,23 @@ variable "ex_databricks_account_id" {
 }
 
 variable "vpc_id" {
-  default = "ID of existing VPC (e.g. \"vpc-01234567890abcdef\")"
+  description = "ID of existing VPC (e.g. \"vpc-01234567890abcdef\")"
 }
 
-variable "cidr_block_private" {
-  default = "10.0.15.0/24"
+variable "private1_subnet_id" {
+  description = "ID of existing subnet (e.g. \"subnet-01234567890abcdef\")"
 }
 
-variable "cidr_block_public" {
-  default = "10.0.16.0/24"
+variable "private2_subnet_id" {
+  description = "ID of existing subnet (e.g. \"subnet-01234567890abcdef\")"
 }
 
-variable "vpce_subnet_cidr" {
-  default = "10.0.17.0/24"
+variable "vpce_subnet_id" {
+  description = "ID of existing subnet (e.g. \"subnet-01234567890abcdef\")"
+}
+
+variable "default_route_table_id" {
+  description = "ID of existing/default route table (e.g. \"rtb-01234567890abcdef\")"
 }
 
 variable "project_name" {
