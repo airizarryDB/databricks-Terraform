@@ -37,14 +37,6 @@ resource "aws_security_group" "databricks_sg" {
   }
 
   egress {
-    description = "Secure Cluster Connectivity"
-    from_port   = 6666
-    to_port     = 6666
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
     description = "FIPS encryption Secure Cluster Connectivity"
     from_port   = 2443
     to_port     = 2443
