@@ -90,6 +90,10 @@ variable "vpce_subnet_cidr" {
 
 variable "project_name" {
   description = "Name that will be used in the workspace URL"
+  validation {
+    condition     = (can(regex("^[a-zA-Z0-9-]+$", var.resource_prefix)))
+    error_message = "Invalid variable name, make sure it is all lower case"
+  }
 }
 
 variable "resource_prefix" {
