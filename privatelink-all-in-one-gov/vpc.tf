@@ -19,8 +19,8 @@ module "vpc" {
     cidrsubnet(var.cidr_block_public, 0, 0)
   ]
   private_subnets = [
-    cidrsubnet(var.cidr_block_private, 2, 0),
-    cidrsubnet(var.cidr_block_private, 2, 1),
+    cidrsubnet(var.cidr_block_private, 1, 0),
+    cidrsubnet(var.cidr_block_private, 1, 1),
     cidrsubnet(var.vpce_subnet_cidr  , 0, 0)
   ]
 
@@ -47,13 +47,6 @@ module "vpc" {
       description = "Metastore"
       from_port   = 3306
       to_port     = 3306
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
-    {
-      description = "Secure Cluster Connectivity"
-      from_port   = 6666
-      to_port     = 6666
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
