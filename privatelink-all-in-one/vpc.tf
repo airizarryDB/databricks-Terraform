@@ -19,8 +19,8 @@ module "vpc" {
     cidrsubnet(var.cidr_block_public, 0, 0)
   ]
   private_subnets = [
-    cidrsubnet(var.cidr_block_private, 2, 0),
-    cidrsubnet(var.cidr_block_private, 2, 1),
+    cidrsubnet(var.cidr_block_private, 1, 0),
+    cidrsubnet(var.cidr_block_private, 1, 1),
     cidrsubnet(var.vpce_subnet_cidr  , 0, 0)
   ]
 
