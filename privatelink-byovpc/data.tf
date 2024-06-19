@@ -1,5 +1,5 @@
 data "databricks_current_user" "me" {
-  provider = databricks.mws
+  provider = databricks.workspace
   depends_on = [ databricks_mws_workspaces.this ]
 }
 
