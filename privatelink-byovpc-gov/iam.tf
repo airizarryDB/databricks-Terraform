@@ -8,7 +8,7 @@ resource "aws_iam_role" "cross_account_role" {
           "Effect" : "Allow",
           "Action" : "sts:AssumeRole",
           "Principal" : {
-            "AWS" : "arn:aws:iam::${var.ex_databricks_account_id}:root"
+            "AWS" : "arn:aws-us-gov:iam::${var.databricks_prod_aws_account_id[var.databricks_gov_shard]}:root"
           },
           "Condition" : {
             "StringEquals" : {

@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "passrole_for_unity_catalog" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
-      identifiers = ["arn:aws-us-gov:iam::${var.ex_databricks_account_id}:role/unity-catalog-prod-UCMasterRole-1QRFA8SGY15OJ"]
+      identifiers = ["arn:aws-us-gov:iam::${var.databricks_prod_aws_account_id[var.databricks_gov_shard]}:role/unity-catalog-prod-UCMasterRole-${var.uc_master_role_id[var.databricks_gov_shard]}"]
       type        = "AWS"
     }
     condition {

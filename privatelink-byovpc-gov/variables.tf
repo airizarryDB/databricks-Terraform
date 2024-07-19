@@ -69,10 +69,20 @@ locals {
   )
 }
 
-variable "ex_databricks_account_id" {
-  type        = string
-  description = "This is the Databricks AWS gov account id (044793339203); used for the bucket policy"
-  default     = "044793339203"
+variable "databricks_prod_aws_account_id" {
+  type = map(string)
+  default = {
+    "civilian" = "044793339203"
+    "dod"      = "170661010020"
+  }
+}
+
+variable "uc_master_role_id" {
+  type = map(string)
+  default = {
+    "civilian" = "1QRFA8SGY15OJ"
+    "dod"      = "1DI6DL6ZP26AS"
+  }
 }
 
 variable "vpc_id" {
