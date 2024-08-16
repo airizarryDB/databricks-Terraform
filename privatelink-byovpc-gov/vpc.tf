@@ -66,7 +66,7 @@ module "vpc_endpoints" {
      s3 = {
        service         = "s3"
        service_type    = "Gateway"
-       route_table_ids = data.aws_route_table.default.id #flatten([aws_route_table.subnet.id, aws_route_table.public.id])
+       route_table_ids = [data.aws_route_table.default.id] #flatten([aws_route_table.subnet.id, aws_route_table.public.id])
        tags = {
          Name = "${var.project_name}-s3-vpc-endpoint"
        }
