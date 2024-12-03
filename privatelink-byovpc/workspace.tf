@@ -13,7 +13,6 @@ resource "databricks_mws_storage_configurations" "this" {
 
 resource "databricks_mws_vpc_endpoint" "backend_rest_vpce" {
   provider            = databricks.mws
-  account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["backend-rest"].id
   vpc_endpoint_name   = "${var.resource_prefix}-vpc-backend-${data.aws_vpc.my_vpc.id}"
   region              = var.region
@@ -22,7 +21,6 @@ resource "databricks_mws_vpc_endpoint" "backend_rest_vpce" {
 
 resource "databricks_mws_vpc_endpoint" "relay" {
   provider            = databricks.mws
-  account_id          = var.databricks_account_id
   aws_vpc_endpoint_id = module.vpc_endpoints.endpoints["relay"].id
   vpc_endpoint_name   = "${var.resource_prefix}-vpc-relay-${data.aws_vpc.my_vpc.id}"
   region              = var.region
@@ -44,7 +42,6 @@ resource "databricks_mws_networks" "this" {
 
 resource "databricks_mws_private_access_settings" "pas" {
   provider                     = databricks.mws
-  account_id                   = var.databricks_account_id
   private_access_settings_name = "${var.region} public"
   region                       = var.region
   public_access_enabled        = true
@@ -52,7 +49,6 @@ resource "databricks_mws_private_access_settings" "pas" {
 
 resource "databricks_mws_workspaces" "this" {
   provider        = databricks.mws
-  account_id      = var.databricks_account_id
   aws_region      = var.region
   workspace_name  = var.project_name
   deployment_name = var.project_name
