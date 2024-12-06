@@ -59,5 +59,6 @@ resource "databricks_mws_workspaces" "this" {
   private_access_settings_id = databricks_mws_private_access_settings.pas.private_access_settings_id
   pricing_tier               = "ENTERPRISE"
   depends_on                 = [databricks_mws_networks.this, databricks_mws_credentials.this,
-    databricks_mws_storage_configurations.this, databricks_mws_private_access_settings.pas]
+    databricks_mws_storage_configurations.this, databricks_mws_private_access_settings.pas,
+    databricks_metastore_data_access.this, databricks_metastore.this]
 }
